@@ -27,10 +27,10 @@ public class User {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    public User(RegisterDTO newUser) {
+    public User(RegisterDTO newUser, String hashedPassword) {
         this.username = newUser.username();
         this.email = newUser.email();
-        this.password = newUser.password();
+        this.password = hashedPassword;
         this.status = UserStatus.ACTIVE;
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
