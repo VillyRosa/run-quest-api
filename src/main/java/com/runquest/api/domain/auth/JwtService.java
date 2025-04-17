@@ -27,4 +27,8 @@ public class JwtService {
                 .withClaim("username", username)
                 .sign(Algorithm.HMAC256(secret));
     }
+
+    public UUID extractUserId(String token) {
+        return UUID.fromString(JWT.decode(token).getSubject());
+    }
 }
