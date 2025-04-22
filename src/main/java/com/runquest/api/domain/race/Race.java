@@ -27,4 +27,14 @@ public class Race {
     private User user;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+
+    public Race(NewRaceDTO newRace, User user) {
+        this.distance = newRace.distance();
+        this.duration = newRace.duration();
+        this.startTime = newRace.startTime();
+        this.endTime = newRace.endTime();
+        this.user = user;
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
+    }
 }
