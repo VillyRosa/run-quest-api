@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.UUID;
 
@@ -19,7 +20,11 @@ public class RaceService {
     @Autowired
     private AuthService authService;
 
-    public Page<RaceResponseDTO> findAll(Pageable pageable) {
+    public Page<RaceResponseDTO> findAll(Pageable pageable, UUID userId) {
+        if (userId != null) {
+            return raceRepository.findByUserId(userId, pageable).map(RaceResponseDTO::new);
+        }
+
         return raceRepository.findAll(pageable).map(RaceResponseDTO::new);
     }
 

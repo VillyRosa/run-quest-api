@@ -19,8 +19,8 @@ public class RaceController {
     private RaceService raceService;
 
     @GetMapping
-    public ResponseEntity<Page<RaceResponseDTO>> getAll(Pageable pageable) {
-        return ResponseEntity.ok().body(raceService.findAll(pageable));
+    public ResponseEntity<Page<RaceResponseDTO>> getAll(Pageable pageable, @RequestParam(required = false) UUID userId) {
+        return ResponseEntity.ok().body(raceService.findAll(pageable, userId));
     }
 
     @GetMapping("/{id}")
