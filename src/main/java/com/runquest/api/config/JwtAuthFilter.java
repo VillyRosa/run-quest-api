@@ -25,7 +25,9 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     private UserRepository userRepository;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+            throws ServletException, IOException {
+
         String authHeader = request.getHeader("Authorization");
 
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
@@ -34,14 +36,31 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         }
 
         String jwt = authHeader.substring(7);
-        UUID userId = jwtService.extractUserId(jwt);
+        UUID userId;
 
-        if (userId != null) {
-            var authToken = new UsernamePasswordAuthenticationToken(userId, null, null);
-            authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-
-            SecurityContextHolder.getContext().setAuthentication(authToken);
+        try {
+            userId = jwtService.extractUserId(jwt);
+        } catch (Exception e) {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            return;
         }
+
+        String scope = jwtService.extractScope(jwt);
+        String path = request.getRequestURI();
+
+        if (path.startsWith("/auth/reset-password/confirm") && !"RESET_PASSWORD".equals(scope)) {
+            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+            return;
+        }
+
+        if (!path.startsWith("/auth") && "RESET_PASSWORD".equals(scope)) {
+            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+            return;
+        }
+
+        var authToken = new UsernamePasswordAuthenticationToken(userId, null, null);
+        authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+        SecurityContextHolder.getContext().setAuthentication(authToken);
 
         filterChain.doFilter(request, response);
     }

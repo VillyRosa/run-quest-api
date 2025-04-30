@@ -1,8 +1,6 @@
 package com.runquest.api.controller;
 
-import com.runquest.api.domain.auth.AuthService;
-import com.runquest.api.domain.auth.LoginDTO;
-import com.runquest.api.domain.auth.RegisterDTO;
+import com.runquest.api.domain.auth.*;
 import com.runquest.api.domain.user.User;
 import com.runquest.api.domain.user.UserResponseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,5 +29,22 @@ public class AuthController {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(new UserResponseDTO(user));
+    }
+
+    @PostMapping("/reset-password/request")
+    public ResponseEntity<Void> resetPasswordRequest(@RequestBody ResetPasswordRequestDTO request) {
+        authService.resetPasswordRequest(request.email());
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/reset-password/verify")
+    public ResponseEntity<String> resetPasswordVerify(@RequestBody ResetPasswordVerifyDTO verify) {
+        return ResponseEntity.ok(authService.resetPasswordVerify(verify));
+    }
+
+    @PostMapping("/reset-password/confirm")
+    public ResponseEntity<Void> resetPasswordConfirm(@RequestBody UpdatePasswordDTO newPassword) {
+        authService.resetPasswordConfirm(newPassword);
+        return ResponseEntity.ok().build();
     }
 }

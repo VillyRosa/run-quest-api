@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -12,6 +13,7 @@ import java.util.UUID;
 @Entity
 @Table(name = "password_reset_tokens")
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class PasswordResetToken {
@@ -26,8 +28,6 @@ public class PasswordResetToken {
 
     private String codeHash;
 
-    private String resetToken;
-
     private LocalDateTime usedAt;
 
     private int attempts;
@@ -37,4 +37,12 @@ public class PasswordResetToken {
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
+
+    public PasswordResetToken(User user, String codeHash) {
+        this.user = user;
+        this.codeHash = codeHash;
+        this.expiresAt = LocalDateTime.now().plusMinutes(15);
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
+    }
 }

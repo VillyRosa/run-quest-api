@@ -2,7 +2,6 @@ create table password_reset_tokens (
     id UUID primary key,
     user_id UUID not null,
     code_hash varchar(255) not null,
-    reset_token varchar(255),
     used_at timestamptz,
     attempts integer not null default 0,
     expires_at timestamptz not null,

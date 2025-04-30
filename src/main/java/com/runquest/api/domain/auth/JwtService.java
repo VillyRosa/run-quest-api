@@ -28,7 +28,25 @@ public class JwtService {
                 .sign(Algorithm.HMAC256(secret));
     }
 
+    public String generateResetToken(UUID id, String username) {
+        Instant now = Instant.now();
+        Instant expiresAt = now.plus(15, ChronoUnit.MINUTES);
+
+        return JWT.create()
+                .withIssuer("runquest-api")
+                .withIssuedAt(Date.from(now))
+                .withExpiresAt(Date.from(expiresAt))
+                .withSubject(id.toString())
+                .withClaim("username", username)
+                .withClaim("scope", "RESET_PASSWORD")
+                .sign(Algorithm.HMAC256(secret));
+    }
+
     public UUID extractUserId(String token) {
         return UUID.fromString(JWT.decode(token).getSubject());
+    }
+
+    public String extractScope(String token) {
+        return JWT.decode(token).getClaim("scope").asString();
     }
 }
