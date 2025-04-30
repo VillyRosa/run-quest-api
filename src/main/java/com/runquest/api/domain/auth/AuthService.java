@@ -96,6 +96,7 @@ public class AuthService {
         return jwtService.generateResetToken(user.getId(), user.getUsername());
     }
 
+    @Transactional
     public void resetPasswordConfirm(UpdatePasswordDTO newPassword) {
         if (!newPassword.password().equals(newPassword.confirmPassword())) {
             throw new IllegalArgumentException("Passwords do not match");
