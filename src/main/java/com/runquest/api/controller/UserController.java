@@ -1,5 +1,7 @@
 package com.runquest.api.controller;
 
+import com.runquest.api.domain.auth.UpdatePasswordDTO;
+import com.runquest.api.domain.user.UpdateUserDTO;
 import com.runquest.api.domain.user.UserResponseDTO;
 import com.runquest.api.domain.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +26,22 @@ public class UserController {
     @GetMapping("/{id}")
     public ResponseEntity<UserResponseDTO> getById(@PathVariable UUID id) {
         return ResponseEntity.ok().body(userService.findById(id));
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<UserResponseDTO> getMyAccount() {
+        return ResponseEntity.ok().body(userService.findMyAccount());
+    }
+
+    @PutMapping("/me")
+    public ResponseEntity<UserResponseDTO> updateMyAccount(@RequestBody UpdateUserDTO updateUser) {
+        return ResponseEntity.ok().body(userService.updateMyAccount(updateUser));
+    }
+
+    @PutMapping("/me/password")
+    public ResponseEntity<Void> updateMyPassword(@RequestBody UpdatePasswordDTO newPassword) {
+        userService.updateMyPassword(newPassword);
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/me")
