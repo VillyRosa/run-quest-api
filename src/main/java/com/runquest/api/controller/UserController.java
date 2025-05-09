@@ -1,6 +1,6 @@
 package com.runquest.api.controller;
 
-import com.runquest.api.domain.auth.UpdatePasswordDTO;
+import com.runquest.api.domain.user.UpdatePasswordDTO;
 import com.runquest.api.domain.user.UpdateUserDTO;
 import com.runquest.api.domain.user.UserResponseDTO;
 import com.runquest.api.domain.user.UserService;

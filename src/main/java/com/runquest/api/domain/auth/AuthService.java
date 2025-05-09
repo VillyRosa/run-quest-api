@@ -97,7 +97,7 @@ public class AuthService {
     }
 
     @Transactional
-    public void resetPasswordConfirm(UpdatePasswordDTO newPassword) {
+    public void resetPasswordConfirm(ResetPasswordConfirmDTO newPassword) {
         if (!newPassword.password().equals(newPassword.confirmPassword())) {
             throw new IllegalArgumentException("Passwords do not match");
         }

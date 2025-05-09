@@ -1,7 +1,6 @@
 package com.runquest.api.domain.user;
 
 import com.runquest.api.domain.auth.AuthService;
-import com.runquest.api.domain.auth.UpdatePasswordDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -45,14 +44,18 @@ public class UserService {
     }
 
     public void updateMyPassword(UpdatePasswordDTO newPassword) {
-        if (!newPassword.password().equals(newPassword.confirmPassword())) {
+        if (!newPassword.newPassword().equals(newPassword.confirmPassword())) {
             throw new IllegalArgumentException("Passwords do not match");
         }
 
         UUID id = authService.getAuthenticatedUserId();
         User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
 
-        String hashedPassword = this.passwordEncoder.encode(newPassword.password());
+        if (!passwordEncoder.matches(newPassword.password(), user.getPassword())) {
+            throw new IllegalArgumentException("Actual password does not match");
+        }
+
+        String hashedPassword = this.passwordEncoder.encode(newPassword.newPassword());
 
         user.setPassword(hashedPassword);
         userRepository.save(user);

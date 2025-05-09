@@ -43,7 +43,7 @@ public class AuthController {
     }
 
     @PostMapping("/reset-password/confirm")
-    public ResponseEntity<Void> resetPasswordConfirm(@RequestBody UpdatePasswordDTO newPassword) {
+    public ResponseEntity<Void> resetPasswordConfirm(@RequestBody ResetPasswordConfirmDTO newPassword) {
         authService.resetPasswordConfirm(newPassword);
         return ResponseEntity.ok().build();
     }
