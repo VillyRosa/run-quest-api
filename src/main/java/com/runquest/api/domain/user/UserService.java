@@ -20,17 +20,17 @@ public class UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public Page<UserResponseDTO> findAll(Pageable pageable) {
-        return userRepository.findAll(pageable).map(UserResponseDTO::new);
+    public Page<PublicUserDTO> findAll(Pageable pageable) {
+        return userRepository.findAll(pageable).map(PublicUserDTO::new);
     }
 
-    public UserResponseDTO findById(UUID id) {
-        return userRepository.findById(id).map(UserResponseDTO::new).orElse(null);
+    public PublicUserDTO findById(UUID id) {
+        return userRepository.findById(id).map(PublicUserDTO::new).orElse(null);
     }
 
     public UserResponseDTO findMyAccount() {
         UUID id = authService.getAuthenticatedUserId();
-        return this.findById(id);
+        return userRepository.findById(id).map(UserResponseDTO::new).orElse(null);
     }
 
     public UserResponseDTO updateMyAccount(UpdateUserDTO updateUser) {
